@@ -1,0 +1,40 @@
+#
+# hosts module
+#
+# Copyright 2008, Puzzle ITC GmbH
+# Copyright 2010, Atizo AG
+# Marcel Härry haerry+puppet(at)puzzle.ch
+# Simon Josi simon.josi+puppet(at)atizo.com
+#
+# This program is free software; you can redistribute 
+# it and/or modify it under the terms of the GNU 
+# General Public License version 3 as published by 
+# the Free Software Foundation.
+#
+
+class hosts(
+  $ipv6 = false
+) {
+  file{'/etc/hosts':
+    ensure => present,
+  }
+  Host{
+    require => File['/etc/hosts'],
+  }
+  host{
+    'localhost.localdomain':
+      ip => '127.0.0.1',
+      host_aliases => 'localhost';
+    $fqdn:
+      ip => $ipaddress,
+      host_aliases => $hostname;
+  }
+  host{'localhost6.localdomain6':
+    ip => '::1',
+    host_aliases => 'localhost6',
+    ensure => $ipv6 ? {
+      true => ensure,
+      default => absent,
+    },
+  }
+}
