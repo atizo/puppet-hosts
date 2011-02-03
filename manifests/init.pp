@@ -11,13 +11,19 @@
 #
 
 class hosts(
-  $ipv6 = false
+  $ipv6 = false,
+  $purge_unmanaged = true
 ) {
-  file{'/etc/hosts':
-    ensure => present,
+  if $purge_unmanaged {
+    resources{'host':
+      purge => true,
+    }
   }
   Host{
     require => File['/etc/hosts'],
+  }
+  file{'/etc/hosts':
+    ensure => present,
   }
   host{
     'localhost.localdomain':
