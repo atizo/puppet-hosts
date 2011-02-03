@@ -37,7 +37,7 @@ class hosts(
     ip => '::1',
     host_aliases => 'localhost6',
     ensure => $ipv6 ? {
-      true => ensure,
+      true => present,
       default => absent,
     },
   }
